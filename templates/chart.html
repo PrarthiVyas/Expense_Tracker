@@ -1,0 +1,155 @@
+
+
+
+{% extends "layout.html" %}
+
+{% block title %}
+   Charts
+{% endblock %}
+
+{% block style %}
+<style>
+    /* General Styling */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+    }
+
+    /* Navbar Styling */
+  /* Navbar Styling */
+  .navbar {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        box-sizing: border-box;
+    }
+
+    .navbar h1 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .navbar-buttons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .navbar-button {
+        background-color: #5bc0de;
+        color: #fff;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+
+    .navbar-button:hover {
+        background-color: #31b0d5;
+    }
+
+    .logout-button {
+        background-color: #d9534f;
+    }
+
+    .logout-button:hover {
+        background-color: #c9302c;
+    }
+
+    /* Chart Section */
+    .chart-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); /* Ensure responsive layout with larger charts */
+        gap: 2rem;
+        margin-top: 5rem;
+    }
+
+    .chart-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .chart-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #555;
+    }
+
+    .chart-image {
+        width: 100%;
+        height: 400px; /* Increased height for bigger charts */
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .navbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .navbar-buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .navbar-button {
+            width: 100%;
+            text-align: center;
+        }
+
+        .chart-container {
+            grid-template-columns: 1fr; /* Stack charts in a single column on smaller screens */
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<body>
+    <!-- Navbar Section -->
+    <div class="navbar">
+        <h1 class="navbar-text">Expense Tracker</h1>
+        <div class="navbar-buttons">
+            <a href="/add" class="navbar-button">Add Expense</a>
+            <a href="/logout" class="navbar-button logout-button">Logout</a>
+        </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div class="container">
+        <h1>Expense Analysis</h1>
+        
+        <div class="chart-container">
+            {% for chart in chart %}
+            <div class="chart-card">
+                <img class="chart-image" src="data:image/png;base64,{{ chart }}" alt="Chart {{ loop.index }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+{% endblock %}

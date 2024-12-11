@@ -1,0 +1,286 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Expense Tracker Dashboard
+{% endblock %}
+
+{% block style %}
+<style>
+    /* General Styling */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 5rem auto;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        overflow-x: auto; /* Handles overflow on smaller screens */
+    }
+
+    h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #444;
+    font-size: 2.5rem; /* Adjust this value as needed */
+}
+
+
+    h1.navbar-text
+        {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #fff;
+    }
+
+    
+
+    /* Navbar Styling */
+    .navbar {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        box-sizing: border-box;
+    }
+
+    .navbar h1 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .navbar-buttons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .navbar-button {
+        background-color: #5bc0de;
+        color: #fff;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+
+    .navbar-button:hover {
+        background-color: #31b0d5;
+    }
+
+    .logout-button {
+        background-color: #d9534f;
+    }
+
+    .logout-button:hover {
+        background-color: #c9302c;
+    }
+
+    /* Content Section */
+    .content {
+        margin-top: 10px; /* Push content below navbar */
+    }
+
+    /* Form Styling */
+    form {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr) auto; /* Adjust column layout */
+        gap: 15px;
+        margin-bottom: 2rem;
+    }
+
+    form input[type="text"],
+    form input[type="date"],
+    form select,
+    form input[type="submit"] {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    form input[type="text"],
+    form input[type="date"] {
+        width: 90%;
+    }
+
+    form select {
+        width: 100%;
+    }
+
+    form input[type="submit"] {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    form input[type="submit"]:hover {
+        background-color: #218838;
+    }
+
+    /* Table Styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+        table-layout: fixed; /* Ensures proper column widths */
+    }
+
+    table th,
+    table td {
+        text-align: left;
+        padding: 10px;
+        border: 1px solid #ddd;
+        word-wrap: break-word; /* Handles long text */
+    }
+
+    table th {
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    table td {
+        background-color: #fff;
+    }
+
+    /* Buttons inside Table */
+    .btn {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-edit {
+        background-color: #ffc107;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+        text-decoration: none;
+    }
+
+    /* Filter Section */
+    .filter-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        gap: 10px;
+    }
+
+    .filter-section label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .filter-section select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        width: auto;
+    }
+
+    .total {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        form {
+            grid-template-columns: 1fr; /* Stack form elements vertically */
+        }
+
+        form input[type="submit"] {
+            width: 100%; /* Full width submit button */
+        }
+
+        .filter-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .filter-section select {
+            margin-top: 10px;
+        }
+
+        .navbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .navbar-buttons {
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .navbar-button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1 class="navbar-text">Expense Tracker</h1>
+        <div class="navbar-buttons">
+            <a href="/add" class="navbar-button">Add Expense</a>
+            <a href="/logout" class="navbar-button logout-button">Logout</a>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="container">
+        <div class="content">
+            <h2>Dashboard</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+ 
+        </div>
+    </div>
+{% endblock %}
