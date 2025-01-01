@@ -3,7 +3,7 @@ from wtforms import SubmitField,DateField,FloatField,StringField,SelectField
 from wtforms.validators import DataRequired
 
 
-choiceType=['Expense','Income']
+choiceType=['Expens','Income']
 class expenseForm(FlaskForm):
     expense=SelectField("Expense/Income",choices=choiceType)
     amount=FloatField("Amount",validators=[DataRequired()])
